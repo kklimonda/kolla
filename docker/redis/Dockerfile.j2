@@ -1,0 +1,13 @@
+FROM {{ namespace }}/{{ image_prefix }}base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends redis-server \
+    && apt-get clean
+
+{% endif %}
+
+COPY extend_start.sh /usr/local/bin/kolla_extend_start
+
+{{ include_footer }}
