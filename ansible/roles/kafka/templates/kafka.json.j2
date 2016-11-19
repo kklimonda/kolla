@@ -1,0 +1,11 @@
+{
+    "command": "/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/server.properties",
+            "dest": "/opt/kafka/config/server.properties",
+            "owner": "root",
+            "perm": "0644"
+        }
+    ]
+}

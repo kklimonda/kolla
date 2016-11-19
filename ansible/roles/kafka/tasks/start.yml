@@ -1,0 +1,10 @@
+- name: Starting kafka container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ kafka_image_full }}"
+    name: "kafka"
+    volumes:
+      - "{{ node_config_directory }}/kafka/:{{ container_config_directory }}/:ro"
+      - "kafka:/var/lib/kafka/"
+      - "kolla_logs:/var/log/kolla/"
