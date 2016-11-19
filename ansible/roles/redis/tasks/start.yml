@@ -1,0 +1,12 @@
+---
+- name: Starting redis container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ redis_image_full }}"
+    name: "redis"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/redis/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "redis:/var/lib/redis"
