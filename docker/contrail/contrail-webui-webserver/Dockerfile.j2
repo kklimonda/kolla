@@ -1,0 +1,10 @@
+FROM {{ namespace }}/{{ image_prefix }}contrail-webui-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+COPY start.sh /contrail-webui-webserver.sh
+
+{% endif %}
+
+{{ include_footer }}

@@ -1,0 +1,21 @@
+FROM {{ namespace }}/{{ image_prefix }}contrail-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends contrail-config-openstack \
+      python-keystonemiddleware python-memcache \
+    && apt-get clean
+
+COPY contrail-config-nodemgr.ini /etc/contrail/supervisord_config_files/
+
+{% if install_type == 'disabled' %}
+
+RUN cd /var/lib/contrail/build/ \
+  && scons controller/src/config
+
+{% endif %}
+
+{% endif %}
+
+{{ include_footer }}

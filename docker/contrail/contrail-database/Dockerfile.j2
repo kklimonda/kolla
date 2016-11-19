@@ -1,0 +1,22 @@
+FROM {{ namespace }}/{{ image_prefix }}contrail-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+COPY cassandra.list /etc/apt/sources.list.d/cassandra.list
+
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 514A2AD631A57A16DD0047EC749D6EEC0353B12C \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends contrail-database contrail-nodemgr python-yaml contrail-utils \
+  && apt-get clean
+
+RUN rm /etc/contrail/supervisord_database_files/kafka.ini
+
+COPY database_event_manager.py /usr/lib/python2.7/dist-packages/nodemgr/database_nodemgr/
+
+COPY my_init.py /usr/local/sbin/init
+RUN chmod 0755 /usr/local/sbin/init
+
+{% endif %}
+
+{{ include_footer }}

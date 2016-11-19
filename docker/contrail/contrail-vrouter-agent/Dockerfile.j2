@@ -1,0 +1,17 @@
+FROM {{ namespace }}/{{ image_prefix }}contrail-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends contrail-vrouter-agent \
+    && apt-get clean
+
+{% endif %}
+
+COPY contrail-nodemgr-vrouter.ini /etc/contrail/supervisord_vrouter_files/
+COPY contrail-vrouter.rules /etc/contrail/supervisord_vrouter_files/
+
+COPY extend_start.sh /usr/local/bin/kolla_extend_start
+RUN chmod 755 /usr/local/bin/kolla_extend_start
+
+{{ include_footer }}

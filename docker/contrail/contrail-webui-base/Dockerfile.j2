@@ -1,0 +1,11 @@
+FROM {{ namespace }}/{{ image_prefix }}contrail-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends contrail-web-controller \
+    && apt-get clean
+
+{% endif %}
+
+{{ include_footer }}

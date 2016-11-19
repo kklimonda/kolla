@@ -1,0 +1,13 @@
+FROM {{ namespace }}/{{ image_prefix }}contrail-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends contrail-control \
+    && apt-get clean
+
+COPY contrail-control-nodemgr.ini /etc/contrail/supervisord_control_files/
+
+{% endif %}
+
+{{ include_footer }}

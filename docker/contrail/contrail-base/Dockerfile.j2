@@ -1,0 +1,21 @@
+FROM {{ namespace }}/{{ image_prefix }}base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends contrail-utils lsof contrail-nodemgr python-yaml \
+      python-futures contrail-utils lsof ntp python-six \
+{% if contrail_distribution in ['juniper'] %}
+      python-cassandra-driver \
+{% else %}
+      python-cassandra \
+{% endif %}
+    && apt-get clean
+
+{% endif %}
+
+COPY extend_start.sh /usr/local/bin/kolla_extend_start
+
+RUN chmod 755 /usr/local/bin/kolla_extend_start
+
+RUN useradd --user-group contrail

@@ -1,0 +1,13 @@
+FROM {{ namespace }}/{{ image_prefix }}contrail-base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends contrail-analytics \
+    && apt-get clean
+
+COPY contrail-analytics-nodemgr.ini /etc/contrail/supervisord_analytics_files/
+
+{% endif %}
+
+{{ include_footer }}
