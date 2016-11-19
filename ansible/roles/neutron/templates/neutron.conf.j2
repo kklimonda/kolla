@@ -31,8 +31,13 @@ host = {{ ansible_hostname }}_{{ item }}
 {% endif %}
 
 allow_overlapping_ips = true
+{% if neutron_plugin_agent == "opencontrail" %}
+core_plugin = neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2
+api_extensions_path = extensions:/usr/lib/python2.7/dist-packages/neutron_plugin_contrail/extensions
+{% else %}
 core_plugin = ml2
 service_plugins = router{% if enable_neutron_lbaas | bool %},neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2{% endif %}
+{% endif %}
 
 {% if enable_neutron_lbaas | bool %}
 [service_providers]
@@ -70,6 +75,7 @@ max_retries = -1
 auth_uri = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_public_port }}
 auth_url = {{ admin_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_admin_port }}
 auth_type = password
+auth_version = v3.0
 project_domain_id = default
 user_domain_id = default
 project_name = service

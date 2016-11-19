@@ -140,3 +140,19 @@
     dest: "{{ node_config_directory }}/{{ item }}/lbaas_agent.ini"
   with_items:
     - "neutron-lbaas-agent"
+
+- name: Ensuring plugin config directories exist
+  file:
+    path: "{{ node_config_directory }}/{{ item }}"
+    state: "directory"
+    recurse: yes
+  with_items:
+    - "neutron-server/plugins"
+    - "neutron-server/plugins/opencontrail"
+
+- name: Copying over ContrailPlugin.ini
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/neutron-server/plugins/opencontrail/{{ item }}"
+  with_items:
+    - "ContrailPlugin.ini"
