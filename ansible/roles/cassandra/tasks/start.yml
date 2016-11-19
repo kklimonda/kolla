@@ -1,0 +1,13 @@
+- name: Starting cassandra cluster
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ cassandra_image_full }}"
+    name: "cassandra"
+    volumes:
+      - "{{ node_config_directory }}/cassandra/:{{ container_config_directory }}/:ro"
+      - "cassandra:/var/lib/cassandra"
+      - "kolla_logs:/var/log/kolla/"
+
+- name: Wait for cassandra startup
+  wait_for: host="{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}" port=9042

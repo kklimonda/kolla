@@ -1,0 +1,17 @@
+{
+    "command": "/usr/sbin/cassandra -f",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/cassandra.yaml",
+            "dest": "/etc/cassandra/cassandra.yaml",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/cassandra-env.sh",
+            "dest": "/etc/cassandra/cassandra-env.sh",
+            "owner": "root",
+            "perm": "0644"
+        }
+    ]
+}

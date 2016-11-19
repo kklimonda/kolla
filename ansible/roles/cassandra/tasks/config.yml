@@ -1,0 +1,31 @@
+---
+- name: Ensuring config directories exist
+  file:
+    path: "{{ node_config_directory }}/{{ item }}"
+    state: "directory"
+    recurse: yes
+  with_items:
+    - "cassandra"
+
+- name: Copying over config.json files for services
+  template:
+    src: "{{ item }}.json.j2"
+    dest: "{{ node_config_directory }}/{{ item }}/config.json"
+  with_items:
+    - "cassandra"
+
+- name: Copying over configuration files for cassandra
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/cassandra/{{ item }}"
+  with_items:
+    - "cassandra.yaml"
+    - "cassandra-env.sh"
+
+- name: Setting sysctl values
+  sysctl: name={{ item.name }} value={{ item.value }} sysctl_set=yes
+  with_items:
+    - { name: "vm.max_map_count", value: 131072}
+  when:
+    - set_sysctl | bool
+    - inventory_hostname in groups['cassandra']
