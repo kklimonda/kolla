@@ -58,6 +58,9 @@ RUN apt-get -y install --no-install-recommends \
         open-iscsi \
         targetcli \
         python-rtslib \
+        contrail-nova-driver \
+        python-contrail \
+        python-contrail-vrouter-api \
     && apt-get clean \
     && mkdir -p /etc/ceph
 

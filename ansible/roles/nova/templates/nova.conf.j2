@@ -51,6 +51,10 @@ compute_driver = fake.FakeDriver
 compute_driver = libvirt.LibvirtDriver
 {% endif %}
 
+{% if enable_contrail | bool %}
+libvirt_vif_driver = nova_contrail_vif.contrailvif.VRouterVIFDriver
+{% endif %}
+
 # Though my_ip is not used directly, lots of other variables use $my_ip
 my_ip = {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
 
