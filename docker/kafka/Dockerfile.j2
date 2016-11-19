@@ -1,0 +1,19 @@
+FROM {{ namespace }}/{{ image_prefix }}base:{{ tag }}
+MAINTAINER {{ maintainer }}
+
+ENV SCALA_VERSION 2.11
+ENV KAFKA_VERSION 0.8.2.1
+
+{% if base_distro in ['ubuntu', 'debian'] %}
+
+RUN apt-get install -y --no-install-recommends openjdk-7-jre \
+    && apt-get clean
+
+RUN curl http://apache.mirrors.spacedump.net/kafka/"$KAFKA_VERSION"/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz -o /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz \
+    && tar xfz /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz -C /opt \
+    && mv /opt/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION" /opt/kafka/ \
+    && rm /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz
+
+{% endif %}
+
+{{ include_footer }}
