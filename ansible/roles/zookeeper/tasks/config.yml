@@ -1,0 +1,28 @@
+---
+- name: Ensuring config directories exist
+  file:
+    path: "{{ node_config_directory }}/{{ item }}"
+    state: "directory"
+    recurse: yes
+  with_items:
+    - "zookeeper"
+
+- name: Copying over config.json files for services
+  template:
+    src: "{{ item }}.json.j2"
+    dest: "{{ node_config_directory }}/{{ item }}/config.json"
+  with_items:
+    - "zookeeper"
+
+- name: Copying over zoo.cfg
+  template:
+    src: "{{ role_path }}/templates/zoo.cfg.j2"
+    dest: "{{ node_config_directory }}/{{ item }}/zoo.cfg"
+  with_items:
+    - "zookeeper"
+
+- name: Create Zookeeper's cluster ID (myid)
+  lineinfile: >
+    dest="{{ node_config_directory }}/zookeeper/myid" create=yes
+    line="{{ groups.zookeeper.index(inventory_hostname) + 1 }}"
+    regexp=".*"

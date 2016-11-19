@@ -1,0 +1,18 @@
+- name: Starting zookeeper cluster
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ zookeeper_image_full }}"
+    name: "zookeeper"
+    volumes:
+      - "{{ node_config_directory }}/zookeeper/:{{ container_config_directory }}/:ro"
+      - "zookeeper:/var/lib/zookeeper"
+      - "kolla_logs:/var/log/kolla/"
+
+- name: Waiting for Zookeeper service to be ready
+  shell: "echo ruok | docker exec -i zookeeper /bin/nc localhost 2181"
+  register: bootstrap_result
+  until: "'imok' in bootstrap_result.stdout"
+  changed_when: False
+  retries: 6
+  delay: 10

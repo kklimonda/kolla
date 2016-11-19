@@ -1,0 +1,18 @@
+{% set mysql_dir = 'mysql' if kolla_base_distro in ['ubuntu', 'debian'] else '' %}
+{
+    "command": "/usr/share/zookeeper/bin/zkServer.sh start-foreground",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/zoo.cfg",
+            "dest": "/etc/zookeeper/conf/zoo.cfg",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/myid",
+            "dest": "/etc/zookeeper/conf/myid",
+            "owner": "root",
+            "perm": "0644"
+        }
+    ]
+}
