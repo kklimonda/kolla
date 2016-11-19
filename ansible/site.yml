@@ -222,3 +222,45 @@
     - { role: manila,
         tags: manila,
         when: enable_manila | bool }
+
+- hosts:
+    - cassandra
+  roles:
+    - { role: cassandra,
+        tags: cassandra }
+
+- hosts:
+    - kafka
+  roles:
+    - { role: kafka,
+        tags: kafka }
+
+- hosts:
+    - zookeeper
+  roles:
+    - { role: zookeeper,
+        tags: zookeeper }
+
+- hosts:
+    - redis
+  roles:
+    - { role: redis,
+        tags: redis }
+
+- hosts:
+    - contrail
+    - contrail-api
+    - ifmap-server
+    - contrail-discovery
+    - contrail-device-manager
+    - contrail-schema
+    - contrail-svc-monitor
+    - contrail-query-engine
+    - contrail-collector
+    - contrail-analytics-api
+    - contrail-control
+    - contrail-agent
+    - contrail-vrouter-agent
+  roles:
+    - { role: contrail,
+        tags: contrail }
