@@ -1,0 +1,17 @@
+---
+- include: config.yml
+
+- name: Remove the containers
+  kolla_docker:
+    name: "{{ item }}"
+    action: "remove_container"
+  register: remove_containers
+  with_items:
+    - contrail-config
+    - contrail-analytics
+    - contrail-control
+    - contrail-webui-jobserver
+    - contrail-webui-webserver
+
+- include: start.yml
+  when: remove_containers.changed

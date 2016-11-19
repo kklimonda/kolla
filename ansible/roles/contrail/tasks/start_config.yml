@@ -1,0 +1,25 @@
+- name: Starting contrail-config container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_config_image_full }}"
+    name: "contrail-config"
+    volumes:
+      - "{{ node_config_directory }}/contrail-config/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+
+- name: Wait for contrail-config container to settle down.
+  command: /bin/sleep 10
+
+- name: Starting contrail-analytics container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_analytics_image_full }}"
+    name: "contrail-analytics"
+    volumes:
+      - "{{ node_config_directory }}/contrail-analytics/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+
+- name: Wait for contrail container to settle down.
+  command: /bin/sleep 10

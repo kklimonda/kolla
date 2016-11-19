@@ -1,0 +1,45 @@
+########
+# Docker
+########
+contrail_config_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-contrail-config"
+contrail_config_tag: "{{ openstack_release }}"
+contrail_config_image_full: "{{ contrail_config_image }}:{{ contrail_config_tag }}"
+
+contrail_control_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-contrail-control"
+contrail_control_tag: "{{ openstack_release }}"
+contrail_control_image_full: "{{ contrail_control_image }}:{{ contrail_control_tag }}"
+
+contrail_analytics_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-contrail-analytics"
+contrail_analytics_tag: "{{ openstack_release }}"
+contrail_analytics_image_full: "{{ contrail_analytics_image }}:{{ contrail_analytics_tag }}"
+
+contrail_database_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-contrail-database"
+contrail_database_tag: "{{ openstack_release }}"
+contrail_database_image_full: "{{ contrail_database_image }}:{{ contrail_database_tag }}"
+
+contrail_webui_jobserver_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-contrail-webui-jobserver"
+contrail_webui_jobserver_tag: "{{ openstack_release }}"
+contrail_webui_jobserver_image_full: "{{ contrail_webui_jobserver_image }}:{{ contrail_webui_jobserver_tag }}"
+
+contrail_webui_webserver_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-contrail-webui-webserver"
+contrail_webui_webserver_tag: "{{ openstack_release }}"
+contrail_webui_webserver_image_full: "{{ contrail_webui_webserver_image }}:{{ contrail_webui_webserver_tag }}"
+
+contrail_vrouter_agent_image: "{{ docker_registry ~ '/' if docker_registry else '' }}{{ docker_namespace }}/{{ kolla_base_distro }}-{{ kolla_install_type }}-contrail-vrouter-agent"
+contrail_vrouter_agent_tag: "{{ openstack_release }}"
+contrail_vrouter_agent_image_full: "{{ contrail_vrouter_agent_image }}:{{ contrail_vrouter_agent_tag }}"
+
+########
+# Cassandra
+########
+
+cassandra_thrift_listen_port: 9160
+cassandra_native_listen_port: 9042
+
+########
+# Contrail
+########
+
+contrail_router_asn: 65000
+
+contrail_log_level: SYS_DEBUG

@@ -1,0 +1,138 @@
+- name: Starting first contrail-config container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_config_image_full }}"
+    name: "contrail_config"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-config/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  when:
+    - inventory_hostname == groups['contrail-api'][0]
+
+#- name: Wait for contrail-config container to settle down.
+#  command: /bin/sleep 10
+#  when: 
+#    - inventory_hostname == groups['contrail-api'][0]
+#    - config_bootstrap.changed
+
+- name: Starting first contrail-analytics container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_analytics_image_full }}"
+    name: "contrail_analytics"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-analytics/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  register: analytics_bootstrap
+  when: 
+    - inventory_hostname == groups['contrail-analytics-api'][0]
+
+- name: Wait for contrail container to settle down.
+  command: /bin/sleep 10
+  when: 
+    - inventory_hostname == groups['contrail-analytics-api'][0]
+    - analytics_bootstrap.changed
+
+- name: Starting other contrail-config containers
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_config_image_full }}"
+    name: "contrail_config"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-config/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  when:
+    - inventory_hostname in groups['contrail-api']
+    - inventory_hostname != groups['contrail-api'][0]
+
+- name: Starting other contrail-analytics containers
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_analytics_image_full }}"
+    name: "contrail_analytics"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-analytics/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  when: 
+    - inventory_hostname in groups['contrail-analytics-api']
+    - inventory_hostname != groups['contrail-analytics-api'][0]
+
+- name: Starting contrail-control container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_control_image_full }}"
+    name: "contrail_control"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-control/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  when: 
+    - inventory_hostname in groups['contrail-control']
+
+- name: Starting contrail-webui-jobserver container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_webui_jobserver_image_full }}"
+    name: "contrail_webui_jobserver"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-webui-jobserver/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  when: 
+    - inventory_hostname in groups['contrail-webui-jobserver']
+
+- name: Starting contrail-webui-webserver container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_webui_webserver_image_full }}"
+    name: "contrail_webui_webserver"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-webui-webserver/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  when: 
+    - inventory_hostname in groups['contrail-webui-webserver']
+
+- name: Starting contrail-vrouter-agent container
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    image: "{{ contrail_vrouter_agent_image_full }}"
+    name: "contrail_vrouter_agent"
+    privileged: True
+    volumes:
+      - "{{ node_config_directory }}/contrail-vrouter-agent/:{{ container_config_directory }}/:ro"
+      - "kolla_logs:/var/log/kolla/"
+      - "/lib/modules:/lib/modules:ro"
+      - "/run:/run"
+      - "/run/netns/:/run/netns/:shared"
+  when: 
+    - inventory_hostname in groups['contrail-vrouter-agent']
+
+- name: Wait for contrail-api startup
+  wait_for: host={{ kolla_internal_vip_address }} port=8082

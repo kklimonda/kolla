@@ -1,0 +1,59 @@
+{
+    "command": "/usr/bin/supervisord --nodaemon -c /etc/contrail/supervisord_analytics.conf",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/contrail-query-engine.conf",
+            "dest": "/etc/contrail/contrail-query-engine.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-topology.conf",
+            "dest": "/etc/contrail/contrail-topology.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-analytics-nodemgr.conf",
+            "dest": "/etc/contrail/contrail-analytics-nodemgr.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-collector.conf",
+            "dest": "/etc/contrail/contrail-collector.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-analytics-api.conf",
+            "dest": "/etc/contrail/contrail-analytics-api.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-alarm-gen.conf",
+            "dest": "/etc/contrail/contrail-alarm-gen.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-keystone-auth.conf",
+            "dest": "/etc/contrail/contrail-keystone-auth.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-snmp-collector.conf",
+            "dest": "/etc/contrail/contrail-snmp-collector.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/vnc_api_lib.ini",
+            "dest": "/etc/contrail/vnc_api_lib.ini",
+            "owner": "root",
+            "perm": "0644"
+        }
+    ]
+}

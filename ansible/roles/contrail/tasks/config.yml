@@ -1,0 +1,129 @@
+---
+- name: Try getting IP address from neutron_external_interface
+  set_fact:
+    dataplane:
+      ipv4:
+        address: "{{ hostvars[inventory_hostname]['ansible_' + neutron_external_interface]['ipv4']['address'] }}"
+        netmask: "{{ hostvars[inventory_hostname]['ansible_' + neutron_external_interface]['ipv4']['netmask'] }}"
+        gateway: "{{ hostvars[inventory_hostname]['ansible_' + neutron_external_interface]['ipv4']['netmask'] }}"
+  when:
+    - "{{ hostvars[inventory_hostname]['ansible_' + neutron_external_interface].ipv4 is defined }}"
+  register: neutron_external_ip
+
+- name: Get IP address from vhost0 interface if neutron_external_interface has no IP
+  set_fact:
+    dataplane:
+      ipv4:
+        address: "{{ hostvars[inventory_hostname]['ansible_vhost0']['ipv4']['address'] }}"
+        netmask: "{{ hostvars[inventory_hostname]['ansible_vhost0']['ipv4']['netmask'] }}"
+        gateway: "{{ hostvars[inventory_hostname]['ansible_vhost0']['ipv4']['netmask'] }}"
+  when:
+    - "{{ hostvars[inventory_hostname]['ansible_' + neutron_external_interface].ipv4 is not defined }}"
+
+- name: Ensuring config directories exist
+  file:
+    path: "{{ node_config_directory }}/{{ item }}"
+    state: "directory"
+    recurse: yes
+  with_items:
+    - "contrail-config"
+    - "contrail-control"
+    - "contrail-analytics"
+    - "contrail-database"
+    - "contrail-webui-jobserver"
+    - "contrail-webui-webserver"
+    - "contrail-vrouter-agent"
+
+- name: Copying over config.json files for services
+  template:
+    src: "{{ item }}.json.j2"
+    dest: "{{ node_config_directory }}/{{ item }}/config.json"
+  with_items:
+    - "contrail-config"
+    - "contrail-analytics"
+    - "contrail-database"
+    - "contrail-control"
+    - "contrail-webui-jobserver"
+    - "contrail-webui-webserver"
+    - "contrail-vrouter-agent"
+
+- name: Copying over configuration files for contrail-config
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-config/{{ item }}"
+  with_items:
+    - "contrail-config-nodemgr.conf"
+    - "contrail-api.conf"
+    - "contrail-discovery.conf"
+    - "contrail-device-manager.conf"
+    - "contrail-schema.conf"
+    - "vnc_api_lib.ini"
+    - "contrail-svc-monitor.conf"
+    - "contrail-keystone-auth.conf"
+
+- name: Copying over IF-MAP configuration
+  template:
+    src: "ifmap/{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-config/{{ item }}"
+  with_items:
+    - "basicauthusers.properties"
+    - "publisher.properties"
+    - "log4j.properties"
+
+- name: Copying over configuration files for contrail-analytics
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-analytics/{{ item }}"
+  with_items:
+    - "contrail-query-engine.conf"
+    - "contrail-alarm-gen.conf"
+    - "contrail-topology.conf"
+    - "contrail-analytics-api.conf"
+    - "contrail-analytics-nodemgr.conf"
+    - "contrail-collector.conf"
+    - "contrail-snmp-collector.conf"
+    - "contrail-keystone-auth.conf"
+    - "vnc_api_lib.ini"
+
+- name: Copying over configuration files for contrail-control
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-control/{{ item }}"
+  with_items:
+    - "contrail-control.conf"
+    - "contrail-keystone-auth.conf"
+    - "vnc_api_lib.ini"
+
+- name: Copying over configuration files for contrail-database
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-database/{{ item }}"
+  with_items:
+    - "contrail-database-nodemgr.conf"
+    - "supervisord_database.conf"
+
+- name: Copying over configuration files for contrail-webui-jobserver
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-webui-jobserver/{{ item }}"
+  with_items:
+    - "config.global.js"
+    - "contrail-webui-userauth.js"
+    - "vnc_api_lib.ini"
+
+- name: Copying over configuration files for contrail-webui-webserver
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-webui-webserver/{{ item }}"
+  with_items:
+    - "config.global.js"
+    - "contrail-webui-userauth.js"
+    - "vnc_api_lib.ini"
+
+- name: Copying over configuration files for contrail-vrouter-agent
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ node_config_directory }}/contrail-vrouter-agent/{{ item }}"
+  with_items:
+    - "contrail-vrouter-agent.conf"
+    - "vnc_api_lib.ini"

@@ -1,0 +1,16 @@
+[DEFAULTS]
+host_ip = {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+log_local = 1
+# {{ contrail_log_level }}
+log_level = SYS_DEBUG 
+log_file = /var/log/kolla/contrail/contrail-alarm-gen.log
+
+zk_list = {% for host in groups['zookeeper'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:2181{% if not loop.last %},{% endif %}{% endfor %} 
+
+kafka_broker_list = {% for host in groups['kafka'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:9092 {% endfor %} 
+
+[DISCOVERY]
+disc_server_ip = {{ kolla_internal_vip_address }}
+
+[REDIS]
+server = {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}

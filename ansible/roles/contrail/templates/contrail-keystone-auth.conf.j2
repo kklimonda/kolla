@@ -1,0 +1,12 @@
+[KEYSTONE]
+admin_user = admin
+admin_user_domain_name = default
+admin_password = {{ keystone_admin_password }}
+admin_tenant_name = admin
+project_domain_name = default
+project_name = admin
+auth_host = {{ kolla_internal_vip_address }}
+auth_port = 35357
+auth_protocol = http
+auth_url = http://{{ kolla_internal_vip_address }}:35357/v3
+memcache_servers = 127.0.0.1:11211

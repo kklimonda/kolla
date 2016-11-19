@@ -1,0 +1,4 @@
+---
+- include: do_rebuild.yml
+  serial: "30%"
+  when: inventory_hostname in groups['contrail']

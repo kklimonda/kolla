@@ -1,0 +1,12 @@
+[DEFAULTS]
+log_local = 1
+log_level = {{ contrail_log_level }}
+log_file = /var/log/kolla/contrail/contrail-snmp-collector.log
+
+#scan_frequency=600
+
+api_server = {{ kolla_internal_vip_address }}
+zookeeper = {% for host in groups['zookeeper'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:2181{% if not loop.last %},{% endif %}{% endfor %}
+
+[DISCOVERY]
+disc_server_ip = {{ kolla_internal_vip_address }}

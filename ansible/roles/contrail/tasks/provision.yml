@@ -1,0 +1,67 @@
+---
+- name: Provision contrail-control node configuration
+  command: docker exec contrail_control
+    /usr/sbin/contrail-provision-control
+    --api_server_ip {{ kolla_internal_vip_address }}
+    --api_server_port 8082
+    --admin_user admin
+    --admin_password {{ keystone_admin_password }}
+    --admin_tenant_name admin
+    --oper add
+    --host_name {{ ansible_hostname }}
+    --host_ip {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+    --router_asn {{ contrail_router_asn }}
+  when: 
+    - inventory_hostname in groups['contrail-control']
+- name: Provision contrail-config node configuration
+  command: docker exec contrail_config
+    /usr/sbin/contrail-provision-config
+    --api_server_ip {{ kolla_internal_vip_address }}
+    --api_server_port 8082
+    --admin_user admin
+    --admin_password {{ keystone_admin_password }}
+    --admin_tenant_name admin
+    --oper add
+    --host_name {{ ansible_hostname }}
+    --host_ip {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+  when: 
+    - inventory_hostname in groups['contrail-api']
+- name: Provision contrail-analytics node configuration
+  command: docker exec contrail_analytics
+    /usr/sbin/contrail-provision-analytics
+    --api_server_ip {{ kolla_internal_vip_address }}
+    --api_server_port 8082
+    --admin_user admin
+    --admin_password {{ keystone_admin_password }}
+    --admin_tenant_name admin
+    --oper add
+    --host_name {{ ansible_hostname }}
+    --host_ip {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+  when: 
+    - inventory_hostname in groups['contrail-analytics-api']
+- name: Provision contrail-vrouter node configuration
+  command: docker exec contrail_vrouter_agent
+    /usr/sbin/contrail-provision-vrouter
+    --api_server_ip {{ kolla_internal_vip_address }}
+    --api_server_port 8082
+    --admin_user admin
+    --admin_password {{ keystone_admin_password }}
+    --admin_tenant_name admin
+    --oper add
+    --host_name {{ ansible_hostname }}
+    --host_ip {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+  when: 
+    - inventory_hostname in groups['contrail-vrouter-agent']
+- name: Provision Metadata linklocal service
+  command: docker exec contrail_config
+    /usr/sbin/contrail-provision-linklocal
+    --api_server_ip {{ kolla_internal_vip_address }}
+    --api_server_port 8082
+    --admin_user admin
+    --admin_password {{ keystone_admin_password }}
+    --admin_tenant_name admin
+    --linklocal_service_name metadata
+    --linklocal_service_ip 169.254.169.254
+    --linklocal_service_port 80
+    --ipfabric_service_ip {{ kolla_internal_vip_address }}
+    --ipfabric_service_port 8775

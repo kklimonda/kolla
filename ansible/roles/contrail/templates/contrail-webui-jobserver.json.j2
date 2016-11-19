@@ -1,0 +1,23 @@
+{
+    "command": "sh /contrail-webui-jobserver.sh",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/config.global.js",
+            "dest": "/etc/contrail/config.global.js",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-webui-userauth.js",
+            "dest": "/etc/contrail/contrail-webui-userauth.js",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/vnc_api_lib.ini",
+            "dest": "/etc/contrail/vnc_api_lib.ini",
+            "owner": "root",
+            "perm": "0644"
+        }
+    ]
+}

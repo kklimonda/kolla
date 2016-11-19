@@ -1,0 +1,71 @@
+{
+    "command": "/usr/bin/supervisord --nodaemon -c /etc/contrail/supervisord_config.conf",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/contrail-config-nodemgr.conf",
+            "dest": "/etc/contrail/contrail-config-nodemgr.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-api.conf",
+            "dest": "/etc/contrail/contrail-api.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-device-manager.conf",
+            "dest": "/etc/contrail/contrail-device-manager.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-discovery.conf",
+            "dest": "/etc/contrail/contrail-discovery.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-schema.conf",
+            "dest": "/etc/contrail/contrail-schema.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-keystone-auth.conf",
+            "dest": "/etc/contrail/contrail-keystone-auth.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/vnc_api_lib.ini",
+            "dest": "/etc/contrail/vnc_api_lib.ini",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/basicauthusers.properties",
+            "dest": "/etc/ifmap-server/basicauthusers.properties",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/log4j.properties",
+            "dest": "/etc/ifmap-server/log4j.properties",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/publisher.properties",
+            "dest": "/etc/ifmap-server/publisher.properties",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/contrail-svc-monitor.conf",
+            "dest": "/etc/contrail/contrail-svc-monitor.conf",
+            "owner": "root",
+            "perm": "0644"
+        }
+    ]
+}

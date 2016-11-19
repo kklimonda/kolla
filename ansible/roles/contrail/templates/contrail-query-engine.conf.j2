@@ -1,0 +1,23 @@
+# Copyright (c) 2014 Juniper Networks, Inc. All rights reserved.
+#
+# Collector configuration options
+#
+
+[DEFAULT]
+cassandra_server_list = {% for host in groups['cassandra'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ cassandra_native_listen_port }} {% endfor %}
+
+log_file = /var/log/kolla/contrail/contrail-query-engine.log
+log_level = {{ contrail_log_level }}
+log_local = 1
+
+# Sandesh send rate limit can be used to throttle system logs transmitted per
+# second. System logs are dropped if the sending rate is exceeded
+sandesh_send_rate_limit=100
+
+[DISCOVERY]
+# port=5998
+server = {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+
+[REDIS]
+# port=6379
+# server=127.0.0.1

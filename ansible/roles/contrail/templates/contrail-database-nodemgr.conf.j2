@@ -1,0 +1,7 @@
+[DEFAULT]
+hostip = {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+minimum_diskGB = 4
+
+[DISCOVERY]
+server = {{ kolla_internal_vip_address }}
+port=5998

@@ -1,0 +1,17 @@
+{
+    "command": "/usr/local/sbin/init --skip-startup-files --skip-runit -- /usr/bin/supervisord --nodaemon -c /etc/contrail/supervisord_database.conf",
+    "config_files": [
+        {
+            "source": "{{ container_config_directory }}/contrail-database-nodemgr.conf",
+            "dest": "/etc/contrail/contrail-database-nodemgr.conf",
+            "owner": "root",
+            "perm": "0644"
+        },
+        {
+            "source": "{{ container_config_directory }}/supervisord_database.conf",
+            "dest": "/etc/contrail/supervisord_database.conf",
+            "owner": "root",
+            "perm": "0644"
+        }
+    ]
+}

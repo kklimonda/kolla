@@ -1,0 +1,40 @@
+[DEFAULTS]
+log_file = /var/log/kolla/contrail/contrail-api.log
+log_level = {{ contrail_log_level }}
+log_local = 1
+
+#listen_ip_addr = {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+listen_ip_addr = 0.0.0.0
+listen_port = 8082
+
+ifmap_server = {{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}
+ifmap_port = 8443
+ifmap_username = api-server
+ifmap_password = api-server
+
+cassandra_server_list = {% for host in groups['cassandra'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ cassandra_thrift_listen_port }} {% endfor %}
+
+rabbit_user = {{ rabbitmq_user }}
+rabbit_password = {{ rabbitmq_password }} 
+rabbit_server = {{ kolla_internal_vip_address }}
+rabbit_port = {{ rabbitmq_port }}
+ 
+disc_server_ip = {{ kolla_internal_vip_address }}
+disc_server_port = 5998
+
+# (StrOpt) default encoding to use for string resources.
+# this is optional variable. Define it if you want to override
+# the default encoder returned by sys.getdefaultencoding()
+# default_encoding = <encoding name>
+# Eg. to set ascii as the encoder
+# default_encoding = ascii
+# Eg. to set utf-8 as the encoder
+# default_encoding = utf-8
+
+
+# Enable optimizations to list resources. Be careful, resources created on
+# release under R1.05 does not support that optimization (especially for port)
+list_optimization_enabled = False
+
+multi_tenancy = True
+auth = keystone
