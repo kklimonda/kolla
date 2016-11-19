@@ -1,0 +1,6 @@
+deb http://[tcpcloud repository]/ubuntu trusty contrail/staging
+deb http://ppa.launchpad.net/opencontrail/ppa/ubuntu trusty main
+deb http://ppa.launchpad.net/tcpcloud/extra/ubuntu trusty main
+
+# cassandra-cpp-driver
+deb http://apt.tcpcloud.eu/nightly/ trusty tcp
